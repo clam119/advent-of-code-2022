@@ -57,6 +57,7 @@ export async function rockPaperScissors(path: string): Promise<AnswerKey> {
         }
     })
 
+     //Part 2 - After the actual guidebooks description is revealed
     splitGameInput.forEach((input) => {
         const opponentChoice = input[0];
         const playerChoice = input[2];
