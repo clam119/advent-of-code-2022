@@ -1,17 +1,23 @@
-const fs = require('fs/promises');
+import { fetchInput } from "./utils/fetch-input";
+import { AnswerKey, AlphabetLookup } from './interfaces'
 
-const rucksackOrganisation = async () => {
-    const elfRucksackInput = fs.readFile('./data/challenge-3.txt', 'utf-8')
-    const resolvedRucksackInput = await elfRucksackInput;
-    const splitRucksackInput = resolvedRucksackInput.split('\r\n')
-    const commonItemList = [];
-    const partTwocommonItemList = []
+export async function rucksackOrganisation(path: string): Promise<AnswerKey> {
+    const elfRucksackInput = await fetchInput(path)
+    const splitRucksackInput = elfRucksackInput.split('\r\n')
+
+    const partOneCommonItemList: string[] = [];
+    const partOneList : string[] = [];
+
+    const partTwoCommonItemList: string[] = []
     const partTwoList = [];
 
-    const alphabetLookup = {};
+    //Currently using 'any since the lookup object is empty until runtime
+    const alphabetLookup: any = {};
 
-    let partOnesumOfPriorities = 0;
-    let partTwoSumOfPriorities = 0;
+    const answerKey: AnswerKey = {
+        partOneAnswer: 0,
+        partTwoAnswer: 0,
+    }
 
     // Create a single Alphabet Lookup Object that contains a-z & A-Z with indexes
     for (let i = 1; i <= 26; i++) {
@@ -24,27 +30,31 @@ const rucksackOrganisation = async () => {
         alphabetLookup[startingUppercaseCharCode] = i + 26;
     }
 
+    //Part 1 - Checks to see if secondCompartment includes characters from firstCompartment
     splitRucksackInput.forEach((rucksack) => {
         const numberOfItems = rucksack.length
         const firstCompartment = rucksack.slice(0, numberOfItems/2);
         const secondCompartment = rucksack.slice(numberOfItems/2);
 
-        //Part 1 - Checks to see if SecondCompartment includes characters from first
         for (let c of firstCompartment) {
             if(secondCompartment.includes(c)) {
-                commonItemList.push(c);
+                partOneCommonItemList.push(c);
                 break;
             }
         }
     })
 
-    commonItemList.forEach((item) => {
-        const sum = alphabetLookup[item];
-        partOnesumOfPriorities += sum;
+    partOneCommonItemList.forEach((item) => {
+        const sum:number = alphabetLookup[item];
+        answerKey.partOneAnswer += sum;
     })
 
+    //Part 2 - Checks for the common character for groups of elves in threes
     for (let i = 0; i < splitRucksackInput.length; i += 3) {
-        const tripleGroupElves = [splitRucksackInput[i], splitRucksackInput[i + 1], splitRucksackInput[[i + 2]]]
+        const tripleGroupElves:any = [splitRucksackInput[i], splitRucksackInput[i + 1], splitRucksackInput[i + 2]]
+        if(tripleGroupElves.includes(undefined)) {
+            break;
+        }
         partTwoList.push(tripleGroupElves)
     }
 
@@ -52,17 +62,18 @@ const rucksackOrganisation = async () => {
         const [firstCompartment, secondCompartment, thirdCompartment] = group;
         for (let c of firstCompartment) {
             if (secondCompartment.includes(c) && thirdCompartment.includes(c)) {
-                partTwocommonItemList.push(c);
+                partTwoCommonItemList.push(c);
                 break;
             }
         }
     })
 
-    partTwocommonItemList.forEach((item) => {
+    partTwoCommonItemList.forEach((item) => {
         const sum = alphabetLookup[item];
-        partTwoSumOfPriorities += sum;
+        answerKey.partTwoAnswer += sum;
     })
-    console.log(partTwoSumOfPriorities)
+
+    return answerKey;
 }
 
-rucksackOrganisation()
+rucksackOrganisation('../../inputs/03-rucksack-reorganisation.txt')
