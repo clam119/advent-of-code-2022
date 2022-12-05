@@ -20,12 +20,6 @@ export async function countCalories(path: string) {
         topThreeElvesTotal: sum(topThreeElves)
     };
 
-    //Part 1 - Getting Elf /w Highest calorie count
-    console.log(answerKey.topCalorieHoardingElf);
-
-    //Part 2 - Sum of Top Three Calorie Hoarding Elves
-    console.log(answerKey.topThreeElvesTotal);
-
     return answerKey;
 }
 
