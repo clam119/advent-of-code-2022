@@ -13,7 +13,6 @@ import { sum, countCalories, readInputConvertNumber} from '../src/01-calorie-cou
             expect(testInput).toEqual([
                 6000, 4000, 11000, 24000, 10000
             ])
-            console.log(testInput)
         })
 
     describe('Testing the countCalories Function', () => {
