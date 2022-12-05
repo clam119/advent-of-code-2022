@@ -1,15 +1,16 @@
 import { fetchInput } from "./utils/fetch-input";
 
-export function getTopThreeElves(elfArr: number[]): number[] {
-    elfArr.sort((a, b) => b - a)
-    return [elfArr[0], elfArr[1], elfArr[2]];
-}
-
 interface AnswerKey {
     topCalorieHoardingElf: number;
     topThreeElves: number[];
     topThreeElvesTotal: number;
 }
+
+export function getTopThreeElves(elfArr: number[]): number[] {
+    elfArr.sort((a, b) => b - a)
+    return [elfArr[0], elfArr[1], elfArr[2]];
+}
+
 export async function countCalories(path: string) {
     const elvesCalorieTotals = await readInputConvertNumber(path);
     const topThreeElves = getTopThreeElves(elvesCalorieTotals);
@@ -24,6 +25,8 @@ export async function countCalories(path: string) {
 
     //Part 2 - Sum of Top Three Calorie Hoarding Elves
     console.log(answerKey.topThreeElvesTotal);
+
+    return answerKey;
 }
 
 export async function readInputConvertNumber(path: string): Promise<number[]>{
@@ -43,6 +46,12 @@ export async function readInputConvertNumber(path: string): Promise<number[]>{
             currentCalorieCount += parseInt(snack);
         }
     })
+
+    //As this function doesnt include final value, final check to add last calorie
+    if(currentCalorieCount !== 0) {
+        elfSnackList.push(currentCalorieCount)
+    }
+
     return elfSnackList;
 }
 
