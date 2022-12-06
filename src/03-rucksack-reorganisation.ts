@@ -1,13 +1,11 @@
 import { fetchInput } from "./utils/fetch-input";
-import { AnswerKey, AlphabetLookup } from './interfaces'
+import { AnswerKey } from './interfaces'
 
 export async function rucksackOrganisation(path: string): Promise<AnswerKey> {
     const elfRucksackInput = await fetchInput(path)
     const splitRucksackInput = elfRucksackInput.split('\r\n')
 
     const partOneCommonItemList: string[] = [];
-    const partOneList : string[] = [];
-
     const partTwoCommonItemList: string[] = []
     const partTwoList = [];
 
