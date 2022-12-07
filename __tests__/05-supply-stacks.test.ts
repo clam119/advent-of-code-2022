@@ -1,4 +1,4 @@
-import { supplyStacks, createStacksObject, insertCratesIntoStack, convertInstructions, moveCratesByInstructions, partOneAnswer } from "../src/05-supply-stacks";
+import { supplyStacks, createStacksObject, insertCratesIntoStack, convertInstructions, partOneMoveCrates, partTwoMoveCrates, partOneAnswer, partTwoAnswer } from "../src/05-supply-stacks";
 const testInput = '../../test-inputs/05-supply-stacks.txt'
 
 describe('Testing the supplyStacks Main Function', () => {
@@ -17,7 +17,14 @@ describe('Testing the supplyStacks Main Function', () => {
         expect(partOneAnswer).toBe('CMZ');
     })
 
+    it('Should return MCD as the partOneAnswer', async() => {
+        const result = await supplyStacks(testInput);
+        const { partOneAnswer, partTwoAnswer } = result;
+        expect(partTwoAnswer).toBe('MCD');
+    })
+
 })
+
 describe('Testing the createStacksObject Function', () => {
     
     it('Should return an object with a length matching the number of stacks', async() => {
@@ -104,10 +111,10 @@ describe('Testing the convertInstructions Function', () => {
 
 })
 
-describe('Testing the moveCratesByInstructions Function', () => {
+describe('Testing the partOneMoveCrates Function', () => {
 
     it('Should return a stackObject as its return value', async() => {
-        const result = await moveCratesByInstructions(testInput);
+        const result = await partOneMoveCrates(testInput);
         expect(result).toMatchObject({
             '1': expect.any(Array),
             '2': expect.any(Array),
@@ -116,7 +123,7 @@ describe('Testing the moveCratesByInstructions Function', () => {
     })
 
     it('Should return a stackObject with the crates rearranged based on the instructions', async() => {
-        const result = await moveCratesByInstructions(testInput);
+        const result = await partOneMoveCrates(testInput);
         expect(result).toMatchObject({
             '1': ['C'],
             '2': ['M'],
@@ -126,16 +133,31 @@ describe('Testing the moveCratesByInstructions Function', () => {
 
 })
 
+
 describe('Testing the partOneAnswer Function', () => {
 
     it('Should return a string as its return value', async() => {
         const result = await partOneAnswer(testInput);
         expect(typeof result).toBe('string')
     })
-
+    
     it('Should return a string as its return value', async() => {
         const result = await partOneAnswer(testInput);
         expect(result).toBe('CMZ')
+    })
+    
+})
+
+describe('Testing the partTwoAnswer Function', () => {
+
+    it('Should return a string as its return value', async() => {
+        const result = await partTwoAnswer(testInput);
+        expect(typeof result).toBe('string')
+    })
+
+    it('Should return a string as its return value', async() => {
+        const result = await partTwoAnswer(testInput);
+        expect(result).toBe('MCD')
     })
 
 })

@@ -9,24 +9,52 @@ interface AnswerKey {
 export async function supplyStacks(path: string): Promise<AnswerKey> {
     const answerKey: AnswerKey = {
         partOneAnswer: await partOneAnswer(path),
-        partTwoAnswer: 'N/A'
+        partTwoAnswer: await partTwoAnswer(path)
     }
+    console.log(answerKey)
     return answerKey;
 }
 
 export async function partOneAnswer(path: string): Promise<string> {
-    const stackObject = await moveCratesByInstructions(path);
+    const stackObject = await partOneMoveCrates(path);
     const stackObjectKeys = Object.values(stackObject);
     let answerKey = '';
 
     for(let i = 0; i < stackObjectKeys.length; i++) {
         answerKey += stackObjectKeys[i][0];
     }
-    console.log(answerKey)
     return answerKey;
 }
 
-export async function moveCratesByInstructions(path: string): Promise<StackObject> {
+export async function partTwoAnswer(path: string): Promise<string> {
+    const stackObject = await partTwoMoveCrates(path);
+    const stackObjectKeys = Object.values(stackObject);
+    let answerKey = '';
+
+    for(let i = 0; i < stackObjectKeys.length; i++) {
+        answerKey += stackObjectKeys[i][0];
+    }
+    return answerKey;
+}
+
+export async function partTwoMoveCrates(path: string): Promise<StackObject> {
+    const stackObject = await createStacksObject(path);
+    const instructions = await convertInstructions(path);
+
+    instructions.forEach((instruction: number[]) => {
+        const [cratesToMove, previousStack, nextStack] = instruction;
+        const cratesToInsert: string[] = [];
+
+        for(let i = 0; i < cratesToMove; i++) {
+            let removedCrates:any = stackObject[previousStack].shift();
+            cratesToInsert.push(removedCrates);
+        }
+        stackObject[nextStack].unshift(...cratesToInsert)
+    })
+    return stackObject;
+}
+
+export async function partOneMoveCrates(path: string): Promise<StackObject> {
     const stackObject = await createStacksObject(path);
     const instructions = await convertInstructions(path);
 
@@ -113,6 +141,5 @@ export function insertCratesIntoStack (startingIndex: number, stackInput: string
     
     return returnStackObject;
 }
-
 
 supplyStacks('../../inputs/05-supply-stacks.txt')
