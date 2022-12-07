@@ -11,7 +11,6 @@ export async function supplyStacks(path: string): Promise<AnswerKey> {
         partOneAnswer: await partOneAnswer(path),
         partTwoAnswer: await partTwoAnswer(path)
     }
-    console.log(answerKey)
     return answerKey;
 }
 
